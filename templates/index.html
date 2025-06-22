@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}Home - My Blog{% endblock %}
+
+{% block content %}
+<div class="hero-section bg-primary text-white rounded-3 p-5 mb-5">
+    <div class="row align-items-center">
+        <div class="col-md-7 text-center text-md-start mb-4 mb-md-0">
+            <h1 class="display-4 fw-bold">Welcome to My Blog</h1>
+            <p class="lead">Discover amazing stories, insights, and experiences</p>
+        </div>
+        <div class="col-md-5 text-center">
+            <img src="{{ url_for('static', filename='img/my_img.JPG') }}" alt="Gourab Chowdhury" class="img-fluid rounded-circle shadow" style="max-width: 220px;">
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <h2 class="mb-4">Latest Posts</h2>
+        
+        {% if posts %}
+            {% for post in posts %}
+            <article class="card card-horizontal mb-4 shadow-sm">
+                <div class="row g-0 align-items-center">
+                    {% if post.image_path %}
+                    <div class="col-4 col-md-3">
+                        <img src="{{ url_for('static', filename=post.image_path) }}" class="img-fluid rounded-start post-image-horizontal" alt="{{ post.title }}">
+                    </div>
+                    {% endif %}
+                    <div class="col">
+                        <div class="card-body py-3 px-3">
+                            <h3 class="card-title mb-2" style="font-size:1.1rem;">
+                                <a href="{{ url_for('view_post', post_id=post.id) }}" class="text-decoration-none">
+                                    {{ post.title }}
+                                </a>
+                            </h3>
+                            <p class="card-text text-muted mb-1" style="font-size:0.9rem;">
+                                <i class="fas fa-calendar-alt me-2"></i>
+                                {{ moment(post.created_at).format('MMMM Do, YYYY') if moment else post.created_at[:10] }}
+                            </p>
+                            <p class="card-text mb-2" style="font-size:0.95rem;">
+                                {{ post.content[:120] }}{% if post.content|length > 120 %}...{% endif %}
+                            </p>
+                            <a href="{{ url_for('view_post', post_id=post.id) }}" class="btn btn-primary btn-sm">
+                                Read More <i class="fas fa-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+        {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-file-alt fa-3x text-muted mb-3"></i>
+                <h3 class="text-muted">No posts yet</h3>
+                <p class="text-muted">Check back later for new content!</p>
+            </div>
+        {% endif %}
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>About</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text">Hey! I am Gourab Chowdhury. Welcome to my personal blog where I share my thoughts, experiences, and insights on various topics.</p>
+            </div>
+        </div>
+        
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Stats</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text">
+                    <strong>Total Posts:</strong> {{ posts|length }}<br>
+                    <strong>Latest Update:</strong> {% if posts %}{{ posts[0].created_at[:10] }}{% else %}No posts yet{% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

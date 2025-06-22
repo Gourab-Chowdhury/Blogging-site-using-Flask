@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Blog - My Blog{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">All Blogs</h1>
+{% for section in sections %}
+<div class="mb-5">
+    <h3>{{ section }}</h3>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for post in posts if post.section == section %}
+        <div class="col">
+            <div class="card card-small h-100 shadow-sm">
+                {% if post.image_path %}
+                <img src="{{ url_for('static', filename=post.image_path) }}" class="card-img-top post-image-small" style="aspect-ratio: 1/1; object-fit: cover;" alt="{{ post.title }}">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ post.title }}</h5>
+                    <p class="card-text">{{ post.content[:100] }}{% if post.content|length > 100 %}...{% endif %}</p>
+                    <a href="{{ url_for('view_post', post_id=post.id) }}" class="btn btn-primary btn-sm">Read More</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endfor %}
+{% endblock %}

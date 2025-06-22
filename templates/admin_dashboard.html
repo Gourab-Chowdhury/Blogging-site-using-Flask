@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - My Blog{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="display-6">
+        <i class="fas fa-tachometer-alt me-2"></i>Admin Dashboard
+    </h1>
+    <div>
+        <a href="{{ url_for('add_admin') }}" class="btn btn-warning me-2">
+            <i class="fas fa-user-plus me-1"></i>Add Admin
+        </a>
+        <a href="{{ url_for('add_section') }}" class="btn btn-info me-2">
+            <i class="fas fa-folder-plus me-1"></i>Add Section
+        </a>
+        <a href="{{ url_for('admin_create') }}" class="btn btn-success">
+            <i class="fas fa-plus me-2"></i>New Post
+        </a>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h5 class="card-title">Total Posts</h5>
+                        <h2 class="mb-0">{{ posts|length }}</h2>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-file-alt fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h5 class="card-title">Published</h5>
+                        <h2 class="mb-0">{{ posts|length }}</h2>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-check-circle fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h5 class="card-title">With Images</h5>
+                        <h2 class="mb-0">{{ posts|selectattr('image_path')|list|length }}</h2>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-image fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">
+            <i class="fas fa-list me-2"></i>All Posts
+        </h5>
+    </div>
+    <div class="card-body">
+        {% if posts %}
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Title</th>
+                            <th>Image</th>
+                            <th>Created</th>
+                            <th>Updated</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for post in posts %}
+                        <tr>
+                            <td>{{ post.id }}</td>
+                            <td>
+                                <a href="{{ url_for('view_post', post_id=post.id) }}" class="text-decoration-none" target="_blank">
+                                    {{ post.title }}
+                                    <i class="fas fa-external-link-alt ms-1 text-muted"></i>
+                                </a>
+                            </td>
+                            <td>
+                                {% if post.image_path %}
+                                    <i class="fas fa-image text-success" title="Has image"></i>
+                                {% else %}
+                                    <i class="fas fa-image text-muted" title="No image"></i>
+                                {% endif %}
+                            </td>
+                            <td>{{ post.created_at[:10] }}</td>
+                            <td>{{ post.updated_at[:10] }}</td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a href="{{ url_for('admin_edit', post_id=post.id) }}" class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="{{ url_for('admin_delete', post_id=post.id) }}" 
+                                       class="btn btn-outline-danger btn-sm"
+                                       onclick="return confirm('Are you sure you want to delete this post?')">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-file-alt fa-3x text-muted mb-3"></i>
+                <h4 class="text-muted">No posts yet</h4>
+                <p class="text-muted">Create your first blog post to get started!</p>
+                <a href="{{ url_for('admin_create') }}" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>Create Post
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
