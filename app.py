@@ -315,13 +315,7 @@ def blog():
     conn.close()
     return render_template('blog.html', posts=posts, sections=sections)
 
-# Run this only once to add the section column if not present
-# import sqlite3
-# conn = sqlite3.connect('blog.db')
-# conn.execute("ALTER TABLE posts ADD COLUMN section TEXT")
-# conn.commit()
-# conn.close()
 
 if __name__ == '__main__':
     init_db()
-    app.run(debug=True)
+    app.run(host='0.0.0.0', debug=True)
