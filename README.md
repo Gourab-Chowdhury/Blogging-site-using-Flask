@@ -1,5 +1,5 @@
 # Flask Blog Application
-[go live](https://journal-by-gourab.onrender.com/)
+[Go Live](https://journal-by-gourab.onrender.com/)
 
 A modern, full-featured blog platform built with Flask.  
 It offers a clean interface for readers and a secure, powerful dashboard for administrators.  
